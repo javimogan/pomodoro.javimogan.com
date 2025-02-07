@@ -39,11 +39,17 @@ export default function PomodoroTimer(props: IPomodoroTimerProps) {
         }
     }, [timeLeft])
 
+    //Variable con la hora a la que va a terminar (Hora actual + tiempo restante)
+    const endTime = React.useMemo(() => {
+        return moment().add(timeLeft, 'seconds').format('HH:mm:ss')
+    }, [timeLeft])
+
     return (
-        <section className='flex flex-col items-center border p-4'>
+        <section className='flex flex-col items-center border p-4 gap-8'>
             <CircularProgress  sx={{ color: 'red' }} size="lg" determinate value={percentage}>
                 {timeFormat}
             </CircularProgress>
+            End {endTime}
         </section>
     )
 }
