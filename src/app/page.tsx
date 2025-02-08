@@ -45,12 +45,19 @@ function flow2Timers(flow: IBlock['blocks']) {
 export default function Home() {
   //Timer de 10 minutos
   const [block, setBlock] = React.useState<IBlock>(blockMorning);
-  const [timers] = React.useState<ITime[]>(flow2Timers(block.blocks));
+  const [timers, setTimers] = React.useState<ITime[]>([]);
   const [currentTimer, setCurrentTimer] = React.useState<number>(0);
   const [isCounting, setIsCounting] = React.useState(false);
   const timer = React.useRef<IPomodoroTimerRef | null>(null);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
+
+  React.useEffect(() => {
+    setTimers(flow2Timers(block.blocks));
+    setCurrentTimer(0);
+    setIsCounting(false);
+    timer.current?.reset();
+  }, [block]);
   const [startBlock, endBlock] = React.useMemo(() => {
     const timers = flow2Timers(block.blocks);
     const _start = moment(block.start, 'HH:mm');
