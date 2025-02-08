@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`flex flex-col ${NotoSerif.className} content-between antialiased min-h-screen border justify-items-center`}>
+      <body className={`flex flex-col ${NotoSerif.className} content-between antialiased min-h-screen justify-items-center`}>
         <Header />
         {children}
         <Footer />
