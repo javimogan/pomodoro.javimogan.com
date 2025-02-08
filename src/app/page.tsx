@@ -26,7 +26,7 @@ export interface IBlock {
 
 
 function flow2Timers(flow: IBlock['blocks']) {
-  let blocks: ITime[] = [];
+  const blocks: ITime[] = [];
   flow.forEach((block) => {
     for (let i = 0; i < block.cycles; i++) {
       blocks.push({ ...block.pomodoro, duration: block.pomodoro.duration * 60 });
@@ -51,7 +51,7 @@ export default function Home() {
   const timer = React.useRef<IPomodoroTimerRef | null>(null);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
-  const [startBlock, endBlock, steps] = React.useMemo(() => {
+  const [startBlock, endBlock] = React.useMemo(() => {
     const timers = flow2Timers(block.blocks);
     const _start = moment(block.start, 'HH:mm');
     const _end = _start.clone();

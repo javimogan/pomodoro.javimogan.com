@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Noto_Serif_Ahom } from "next/font/google";
 import "./globals.css";
 import Header from "./Component/Header";

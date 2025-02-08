@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useCountUp } from 'use-count-up';
 import { ITime } from '../page';
 
@@ -43,7 +43,7 @@ export const PomodoroTimer = React.forwardRef<IPomodoroTimerRef, IPomodoroTimerP
           const endBlockTime = React.useMemo(() => {
         const end = moment().add(timeLeft, 'seconds');
         return end.format('HH:mm:ss');
-    }, [timeLeft, isCounting]);
+    }, [timeLeft]);
     return (
         <section className='flex flex-col items-center p-4 gap-4'>
                 <h1>{timer?.text}</h1>
