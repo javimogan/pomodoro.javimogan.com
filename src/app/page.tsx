@@ -123,8 +123,7 @@ export default function Home() {
                 if (!realStartTime) {
                   setRealStartTime(moment().format('HH:mm'));
                 }
-                const totalDuration = timers.reduce((acc, t) => acc + t.duration, 0);
-                setRealStopTime(moment().add(totalDuration, 'seconds').format('HH:mm'));
+                setRealStopTime(moment().add(timers.slice(currentTimer+1, timers.length).reduce((acc, t) => acc + t.duration, 0), 'seconds').format('HH:mm'));
                 setIsCounting(true)
               }}>
               Start
@@ -132,7 +131,7 @@ export default function Home() {
           )
         }
         {/* <button onClick={() => {timer.current?.reset()}}>Reset</button> */}
-        <button onClick={() => { next(false) }}>Skip</button>
+        <button onClick={() => { setRealStopTime(moment().add(timers.slice(currentTimer+1, timers.length).reduce((acc, t) => acc + t.duration, 0), 'seconds').format('HH:mm')); next(false) }}>Skip</button>
       </div>
     </main>
 
