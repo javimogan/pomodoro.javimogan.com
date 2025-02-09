@@ -8,13 +8,13 @@ export const blocks: IBlock[] = [
       {
         cycles: 3,
         pomodoro: { color: '#166534', text: 'Work time', duration: 45 },
-        shortBreak: { color: '#614236', text: 'Short Break', duration: 10 },
+        shortBreak: { color: '#614236', text: 'Short Break', duration: 8 },
         longBreak: { color: '#B91724', text: 'Long Break', duration: 25 },
       },
       {
         cycles: 2,
         pomodoro: { color: '#166534', text: 'Work time', duration: 45 },
-        shortBreak: { color: '#614236', text: 'Short Break', duration: 10 },
+        shortBreak: { color: '#614236', text: 'Short Break', duration: 8 },
         longBreak: { color: '#B91724', text: 'Long Break', duration: 15 },
       }],
   },
