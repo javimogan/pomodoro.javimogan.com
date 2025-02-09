@@ -85,8 +85,8 @@ export default function Home() {
 
     <main className="flex flex-col items-center my-8 gap-4">
       <section className="flex flex-row items-center gap-2">
-        <button onClick={()=>setBlock(blockMorning)} type="button" className="text-white bg-gray-800 hover:bg-gray-900  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">{blockMorning.name}</button>
-        <button onClick={()=>setBlock(blockAfternoon)} type="button" className="text-white bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  dark-rk:y-700">{blockAfternoon.name}</button>
+        <button onClick={() => setBlock(blockMorning)} type="button" className={`text-white bg-${block.name==='Morning'?'slate':'gray'}-800 hover:bg-${block.name==='Morning'?'slate':'gray'}-900  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2`}>{blockMorning.name}</button>
+        <button onClick={() => setBlock(blockAfternoon)} type="button" className={`text-white bg-${block.name==='Afternoon'?'slate':'gray'}-800 hover:bg-${block.name==='Afternoon'?'slate':'gray'}-900  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2`}>{blockAfternoon.name}</button>
       </section>
       <audio ref={audioRef} src="/audio/sound_1.mp3" />
       <div className="flex flex-row items-center gap-2">
@@ -101,7 +101,18 @@ export default function Home() {
         isCounting={isCounting}
       />
       <div className='flex gap-8'>
-        {isCounting ? <button onClick={() => { setIsCounting(false) }}>Pause</button> : <button onClick={() => { setIsCounting(true) }}>Start</button>}
+        {isCounting ? (
+          <button
+            className="text-white bg-red-800 hover:bg-red-900  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+            onClick={() => { setIsCounting(false) }}>Pause</button>) :
+          (
+            <button
+              className="text-white bg-green-800 hover:bg-green-900  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+              onClick={() => { setIsCounting(true) }}>
+              Start
+            </button>
+          )
+        }
         {/* <button onClick={() => {timer.current?.reset()}}>Reset</button> */}
         <button onClick={() => { next(false) }}>Skip</button>
       </div>
