@@ -1,15 +1,18 @@
-import { Noto_Serif_Ahom } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Header from "./Component/Header";
 import Footer from "./Component/Footer";
 
 
-const NotoSerif = Noto_Serif_Ahom({
+const Font = Montserrat({
   weight: "400",
-  variable: "--font-noto-serif-ahom",
   subsets: ["latin"],
 });
 
+export const metadata = {
+  title: "Pomodoro by javimogan",
+  description: "Pomodoro timer"
+}
 
 export default function RootLayout({
   children,
@@ -18,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`flex flex-col ${NotoSerif.className} content-between antialiased min-h-screen justify-items-center`}>
+      <body className={`flex flex-col ${Font.className} content-between antialiased min-h-screen justify-items-center`}>
         <Header />
         {children}
         <Footer />

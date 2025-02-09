@@ -43,7 +43,7 @@ export const PomodoroTimer = React.forwardRef<IPomodoroTimerRef, IPomodoroTimerP
           const endBlockTime = React.useMemo(() => {
         const end = moment().add(timeLeft, 'seconds');
         return end.format('HH:mm:ss');
-    }, [timeLeft]);
+    }, [isCounting]);
     return (
         <section className='flex flex-col items-center p-4 gap-4'>
                 <h1>{timer?.text}</h1>
@@ -68,7 +68,7 @@ export const PomodoroTimer = React.forwardRef<IPomodoroTimerRef, IPomodoroTimerP
                         strokeLinecap="round"
                         transform="rotate(-90, 50, 50)"
                     />
-                    <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="15" fill={'white'}>
+                    <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="15" fill={timer?.color}>
                         {timeLeftFormatted}
                     </text>
                     {isCounting && (

@@ -4,10 +4,13 @@ export default function Header() {
     return (
         <header className='flex flex-col text-center p-4'
         >
-            <h1 className='text-2xl'>
+            <div className='flex items-center justify-center gap-2'>
+                <img src='/images/pomodoro.svg' width={40} alt='Tomato' className='inline-block' />
+            <h1 className='text-4xl'>
                 POMODORO
             </h1>
-            <span className='text-xs'>
+            </div>
+            <span className='text-s'>
                 Now is {moment().format('HH:mm')}
             </span>
         </header>

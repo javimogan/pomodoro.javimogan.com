@@ -10,8 +10,8 @@ export default function ProgressBalls(props: IProps) {
                     key={i}
                     style={{
                         backgroundColor: props.balls[i],
-                        opacity: i > props.currentIndex ? 0.5 : 1,
-                        filter: i > props.currentIndex ? 'grayscale(80%)' : 'none',
+                        opacity: i > props.currentIndex ? 0.6 : 1,
+                        filter: i > props.currentIndex ? 'grayscale(10%)' : 'none',
                     }}
                     className={`w-6 h-6 rounded-full`}
                 ></div>

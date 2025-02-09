@@ -3,7 +3,7 @@ import React from "react";
 import { IPomodoroTimerRef, PomodoroTimer } from "./Component/PomodoroTimer";
 import ProgressBalls from "./Component/ProgressBall";
 import moment from "moment";
-import { blockAfternoon, blockMorning } from "@/BLOCKS";
+import { blocks } from "@/BLOCKS";
 
 export interface ITime {
   color: string;
@@ -12,7 +12,7 @@ export interface ITime {
 }
 
 export interface IBlock {
-  start: string;
+  start?: string;
   name: string;
   blocks: {
     cycles: number;
@@ -46,7 +46,7 @@ export default function Home() {
   //Timer de 10 minutos
   const [realStartTime, setRealStartTime] = React.useState<string | undefined>();
   const [realStopTime, setRealStopTime] = React.useState<string | undefined>();
-  const [block, setBlock] = React.useState<IBlock>(blockMorning);
+  const [block, setBlock] = React.useState<IBlock>(blocks[0]);
   const [timers, setTimers] = React.useState<ITime[]>([]);
   const [currentTimer, setCurrentTimer] = React.useState<number>(0);
   const [isCounting, setIsCounting] = React.useState(false);
@@ -73,7 +73,7 @@ export default function Home() {
       _end.add(t.duration, 'seconds');
     });
     console.log(steps);
-    return [moment(block.start, 'HH:mm').format("HH:mm"), _end.format('HH:mm'), steps];
+    return [block.start && moment(block.start, 'HH:mm').format("HH:mm"), block.start &&  _end.format('HH:mm'), steps];
   }, [block]);
   const next = React.useCallback((sound: boolean = true) => {
     //Sonar cancion
@@ -87,13 +87,16 @@ export default function Home() {
 
     <main className="flex flex-col items-center my-8 gap-4">
       <section className="flex flex-row items-center gap-2">
-        <button onClick={() => setBlock(blockMorning)} type="button" className={`text-white ${block.name === 'Morning' ? 'bg-amber-800 hover:bg-amber-900' : 'bg-gray-800 hover:bg-gray-900'}  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2`}>{blockMorning.name}</button>
-        <button onClick={() => setBlock(blockAfternoon)} type="button" className={`text-white ${block.name === 'Afternoon' ? 'bg-amber-800 hover:bg-amber-900' : 'bg-gray-800 hover:bg-gray-900'}  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2`}>{blockAfternoon.name}</button>
+        {blocks.map((b) => (
+          <button key={`block-${b.name}`} onClick={() => setBlock(b)} type="button" className={`text-white ${block.name === b.name ? 'bg-[#B91724] hover:bg-[#CA1724]' : 'bg-[#a6595fa0] hover:bg-[#B91724BB]'}  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2`}>{b.name}</button>
+        ))}
       </section>
       <audio ref={audioRef} src="/audio/sound_1.mp3" />
       <div className="flex flex-row items-center gap-2">
         <span className='text-1xl font-bold'>{block.name}</span>
-        <span>{startBlock} ~ {endBlock}</span>
+        {startBlock && endBlock && (
+          <span>{startBlock} ~ {endBlock}</span>
+        )}
         {realStartTime && realStopTime && (
           <>
             <span>//</span>
@@ -111,11 +114,11 @@ export default function Home() {
       <div className='flex gap-8'>
         {isCounting ? (
           <button
-            className="text-white bg-red-800 hover:bg-red-900  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+            className="text-white bg-[#B91724] hover:bg-[#CA1724]  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
             onClick={() => { setIsCounting(false) }}>Pause</button>) :
           (
             <button
-              className="text-white bg-green-800 hover:bg-green-900  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+              className="text-white bg-[#166534] hover:bg-[#166534]  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
               onClick={() => {
                 if (!realStartTime) {
                   setRealStartTime(moment().format('HH:mm'));
