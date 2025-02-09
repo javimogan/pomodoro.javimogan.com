@@ -1,8 +1,8 @@
 
 
-## Pomodoro
 
-[**Pomodoro by javimogan**](https://pomodoro.javimogan.com)
+## [**POMODORO.javimogan.com**](https://pomodoro.javimogan.com)
+
 <p align="center">
 <img src="https://github.com/javimogan/pomodoro.javimogan.com/blob/main/public/images/banner.svg"
 	alt="Thumbnail"
