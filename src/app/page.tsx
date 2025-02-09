@@ -88,7 +88,7 @@ export default function Home() {
     <main className="flex flex-col items-center my-8 gap-4">
       <section className="flex flex-row items-center gap-2">
         {blocks.map((b) => (
-          <button key={`block-${b.name}`} onClick={() => setBlock(b)} type="button" className={`text-white ${block.name === b.name ? 'bg-[#B91724] hover:bg-[#CA1724]' : 'bg-[#a6595fa0] hover:bg-[#B91724BB]'}  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2`}>{b.name}</button>
+          <button key={`block-${b.name}`} onClick={() => setBlock(b)} type="button" className={`text-white ${block.name === b.name ? 'bg-[#B91724] hover:bg-[#CA1724]' : 'bg-[#814652] hover:bg-[#B91724BB]'}  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2`}>{b.name}</button>
         ))}
       </section>
       <audio ref={audioRef} src="/audio/sound_1.mp3" />
