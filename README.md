@@ -4,9 +4,9 @@
 
 [**Pomodoro by javimogan**](https://pomodoro.javimogan.com)
 <p align="center">
-<img src="https://raw.githubusercontent.com/javimogan/vehicle-logos-dataset/main/logos/thumbnail.png"
+<img src="https://github.com/javimogan/pomodoro.javimogan.com/blob/main/public/images/banner.svg"
 	alt="Thumbnail"
-	width=1024
+	width=250
 	style="float: left; margin-right: 10px;" />
 </p>
 
