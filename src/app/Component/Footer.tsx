@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Footer() {
     return (
-        <footer className="flex flex-wrap items-center justify-center">
+        <footer className="flex flex-wrap items-center justify-center m-8">
             Pomodoro by
             <a
                 className="flex items-center gap-2 hover:underline hover:underline-offset-4 italic"
