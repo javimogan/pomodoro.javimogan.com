@@ -10,7 +10,11 @@ export interface ITime {
   text: string;
   duration: number;
 }
-
+export interface IFlow extends ITime {
+  type: "cycle" | "shortBreak" | "longBreak"
+  start?: string;
+  end?: string;
+}
 export interface IBlock {
   start?: string;
   name: string;
@@ -27,25 +31,36 @@ export interface IBlock {
 
 
 
-function flow2Timers(flow: IBlock) {
-  const blocks: (ITime & { type: "cycle" | "shortBreak" | "longBreak" })[] = [];
+function flow2Timers(flow: IBlock, startBlock:string=moment().format('HH:mm')) {
+  const blocks: IFlow[] = [];
+  
+  let _start = startBlock;
+  let _end = _start;
   flow.blocks.forEach((block) => {
     for (let i = 0; i < block.cycles; i++) {
-      blocks.push({ ...block.pomodoro, duration: block.pomodoro.duration * 60, type: 'cycle' });
+      _end = moment(_end, 'HH:mm').add(block.pomodoro.duration, 'minutes').format('HH:mm');
+      blocks.push({ ...block.pomodoro, duration: block.pomodoro.duration * 60, type: 'cycle', start: _start, end: _end });
+      //_start = _end;
       if (i < block.cycles - 1) {
-        blocks.push({ ...block.shortBreak, duration: block.shortBreak.duration * 60, type: 'shortBreak' });
+        _end = moment(_end, 'HH:mm').add(block.shortBreak.duration, 'minutes').format('HH:mm');
+        blocks.push({ ...block.shortBreak, duration: block.shortBreak.duration * 60, type: 'shortBreak', start: _start, end: _end });
+        //_start = _end;
       }
     }
-    blocks.push({ ...block.longBreak, duration: block.longBreak.duration * 60, type: 'longBreak' });
+    _end = moment(_end, 'HH:mm').add(block.longBreak.duration, 'minutes').format('HH:mm');
+    blocks.push({ ...block.longBreak, duration: block.longBreak.duration * 60, type: 'longBreak', start: _start, end: _end });
+    //_start = _end;
   });
   if (flow.infinite !== true) {
     if (blocks[blocks.length - 1].type !== 'cycle') {
       blocks.pop();
     }
   }
+  console.log("BLOSKC")
+  console.log(blocks.map((b) => [b.start,b.end]));
   return blocks;
 }
-export function getFlowEndTime(startTime: string, flow: (ITime & { type: "cycle" | "shortBreak" | "longBreak" })[]) {
+function getFlowEndTime(startTime: string, flow: IFlow[]) {
   const _start = moment(startTime, 'HH:mm');
   const _end = _start.clone();
   flow.forEach((t) => _end.add(t.duration, 'seconds'));
@@ -56,7 +71,7 @@ export default function Home() {
   //Selected block
   const [block, setBlock] = React.useState<IBlock>(blocks[0]);
   //Timers for the block
-  const [timers, setTimers] = React.useState<(ITime & { type: "cycle" | "shortBreak" | "longBreak" })[]>([]);
+  const [timers, setTimers] = React.useState<IFlow[]>([]);
   //Current timer
   const [currentTimer, setCurrentTimer] = React.useState<number>(0);
   //Number of loops for infinite block
@@ -71,7 +86,7 @@ export default function Home() {
 
 
   const reset = React.useCallback(() => {
-    setTimers(flow2Timers(block));
+    setTimers(flow2Timers(block, block.start));
     setCurrentTimer(0);
     setIsCounting(false);
     timer.current?.reset();
@@ -82,23 +97,23 @@ export default function Home() {
   }, [block]);
 
   //Set theoretical data
-  const [theoricalStepsBlock] = React.useMemo(() => {
-    if(!timers || timers.length <= 0){
-      return [undefined,undefined,[]];
-    }
-    const _start = moment(block.start, 'HH:mm');
-    const steps: { start: string, end: string, type: string }[] = [];
-    timers.forEach((t) => {
-      steps.push({
-        start: _start.format('HH:mm'),
-        end: _start.add(t.duration, 'seconds').format('HH:mm'),
-        type: t.type
-      });
-    });
-    // console.log(steps);
-    // console.log(moment(block.start, 'HH:mm').format("HH:mm"), block.start && (getFlowEndTime(block.start,timers)))
-    return [steps];
-  }, [timers]);
+  // const [theoricalStepsBlock] = React.useMemo(() => {
+  //   if(!timers || timers.length <= 0){
+  //     return [undefined,undefined,[]];
+  //   }
+  //   const _start = moment(block.start, 'HH:mm');
+  //   const steps: { start: string, end: string, type: string }[] = [];
+  //   timers.forEach((t) => {
+  //     steps.push({
+  //       start: _start.format('HH:mm'),
+  //       end: _start.add(t.duration, 'seconds').format('HH:mm'),
+  //       type: t.type
+  //     });
+  //   });
+  //   // console.log(steps);
+  //   // console.log(moment(block.start, 'HH:mm').format("HH:mm"), block.start && (getFlowEndTime(block.start,timers)))
+  //   return [steps];
+  // }, [timers]);
 
   const next = React.useCallback((sound: boolean = true, manual: boolean = false) => {
     if (timers.length <= 0) {
@@ -148,18 +163,18 @@ export default function Home() {
         ))}
       </section>
       <audio ref={audioRef} src="/audio/sound_1.mp3" />
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex flex-col items-center gap-2">
         {block.infinite && (
           <span className='text-1xl font-bold'>Loops: {loops}</span>
         )}
 
         {realTime && (
           <>
-            <span>Block time {realTime[0]} ~ {realTime[1]}</span>
+            <span>{realTime[0]} ~ {realTime[1]}</span>
           </>
         )}
       </div>
-      <ProgressBalls startBlock={realTime?realTime[0]:block.start} currentIndex={currentTimer} balls={timers} />
+      <ProgressBalls currentIndex={currentTimer} balls={timers} />
       <PomodoroTimer
         ref={timer}
         timer={timers[currentTimer]}

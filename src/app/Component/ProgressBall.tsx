@@ -4,27 +4,26 @@ import React from "react";
 
 interface IProps {
     currentIndex: number;
-    startBlock?: string;
     balls: (ITime & { type: "cycle" | "shortBreak" | "longBreak", start?:string, end?:string})[];
 }
 export default function ProgressBalls(props: IProps) {
-    const balls = React.useMemo(() => {
-        if (!props.startBlock) return props.balls;
-        let start = props.startBlock;
-        return props.balls.map((ball) => {
-            let _end = moment(start, 'HH:mm').add(ball.duration, 'seconds').format('HH:mm');
-            let aux = { ...ball, start: start, end: _end };
-            start = _end;
-            return aux
-        });
+    // const balls = React.useMemo(() => {
+    //     if (!props.startBlock) return props.balls;
+    //     let start = props.startBlock;
+    //     return props.balls.map((ball) => {
+    //         let _end = moment(start, 'HH:mm').add(ball.duration, 'seconds').format('HH:mm');
+    //         let aux = { ...ball, start: start, end: _end };
+    //         start = _end;
+    //         return aux
+    //     });
 
-    }, [props])
+    // }, [props])
     return (
         <div className="flex gap-2 w-full justify-center">
-            {balls.map((_, i) => (
+            {props.balls.map((_, i) => (
                 <div
                     key={i}
-                    title={(balls[i].start && balls[i].end) && balls[i].start + ' ~ ' + balls[i].end}
+                    title={(props.balls[i].start && props.balls[i].end) && props.balls[i].start + ' ~ ' + props.balls[i].end}
                     style={{
                         backgroundColor: props.balls[i].color,
                         opacity: i > props.currentIndex ? 0.6 : 1,
