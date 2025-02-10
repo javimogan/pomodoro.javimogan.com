@@ -134,6 +134,7 @@ export default function Home() {
 
   React.useEffect(() => {
     let auxTime:string;
+    setTimers(flow2Timers(block, !isCounting?block.start: undefined));
     if (!isCounting) {
       setRealTime(undefined);
     } else {
