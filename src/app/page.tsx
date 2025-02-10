@@ -40,16 +40,16 @@ function flow2Timers(flow: IBlock, startBlock:string=moment().format('HH:mm')) {
     for (let i = 0; i < block.cycles; i++) {
       _end = moment(_end, 'HH:mm').add(block.pomodoro.duration, 'minutes').format('HH:mm');
       blocks.push({ ...block.pomodoro, duration: block.pomodoro.duration * 60, type: 'cycle', start: _start, end: _end });
-      //_start = _end;
+      _start = _end;
       if (i < block.cycles - 1) {
         _end = moment(_end, 'HH:mm').add(block.shortBreak.duration, 'minutes').format('HH:mm');
         blocks.push({ ...block.shortBreak, duration: block.shortBreak.duration * 60, type: 'shortBreak', start: _start, end: _end });
-        //_start = _end;
+        _start = _end;
       }
     }
     _end = moment(_end, 'HH:mm').add(block.longBreak.duration, 'minutes').format('HH:mm');
     blocks.push({ ...block.longBreak, duration: block.longBreak.duration * 60, type: 'longBreak', start: _start, end: _end });
-    //_start = _end;
+    _start = _end;
   });
   if (flow.infinite !== true) {
     if (blocks[blocks.length - 1].type !== 'cycle') {
