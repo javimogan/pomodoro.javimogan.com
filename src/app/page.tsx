@@ -56,8 +56,6 @@ function flow2Timers(flow: IBlock, startBlock:string=moment().format('HH:mm')) {
       blocks.pop();
     }
   }
-  console.log("BLOSKC")
-  console.log(blocks.map((b) => [b.start,b.end]));
   return blocks;
 }
 function getFlowEndTime(startTime: string, flow: IFlow[]) {

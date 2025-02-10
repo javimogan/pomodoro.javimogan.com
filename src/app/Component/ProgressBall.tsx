@@ -1,3 +1,4 @@
+"use client"
 import moment from "moment";
 import { ITime } from "../page";
 import React from "react";

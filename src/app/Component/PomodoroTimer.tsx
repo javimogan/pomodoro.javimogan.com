@@ -1,3 +1,4 @@
+"use client";
 import moment from 'moment';
 import React from 'react';
 import { useCountUp } from 'use-count-up';
