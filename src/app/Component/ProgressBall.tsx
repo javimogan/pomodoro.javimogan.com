@@ -1,15 +1,32 @@
+import moment from "moment";
+import { ITime } from "../page";
+import React from "react";
+
 interface IProps {
     currentIndex: number;
-    balls: string[];
+    startBlock?: string;
+    balls: (ITime & { type: "cycle" | "shortBreak" | "longBreak", start?:string, end?:string})[];
 }
 export default function ProgressBalls(props: IProps) {
+    const balls = React.useMemo(() => {
+        if (!props.startBlock) return props.balls;
+        let start = props.startBlock;
+        return props.balls.map((ball) => {
+            let _end = moment(start, 'HH:mm').add(ball.duration, 'seconds').format('HH:mm');
+            let aux = { ...ball, start: start, end: _end };
+            start = _end;
+            return aux
+        });
+
+    }, [props])
     return (
         <div className="flex gap-2 w-full justify-center">
-            {Array.from({ length: props.balls.length }, (_, i) => (
+            {balls.map((_, i) => (
                 <div
                     key={i}
+                    title={(balls[i].start && balls[i].end) && balls[i].start + ' ~ ' + balls[i].end}
                     style={{
-                        backgroundColor: props.balls[i],
+                        backgroundColor: props.balls[i].color,
                         opacity: i > props.currentIndex ? 0.6 : 1,
                         filter: i > props.currentIndex ? 'grayscale(10%)' : 'none',
                     }}

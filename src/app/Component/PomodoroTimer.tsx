@@ -5,7 +5,7 @@ import { ITime } from '../page';
 
 
 export interface IPomodoroTimerProps {
-    timer?: ITime;
+    timer?: ITime & { type: "cycle" | "shortBreak" | "longBreak" };
     onEnd: () => void;
     isCounting: boolean;
 }
@@ -34,9 +34,12 @@ export const PomodoroTimer = React.forwardRef<IPomodoroTimerRef, IPomodoroTimerP
     }));
 
     const [timeLeft, porcentage] = React.useMemo(() => smooth as unknown as [number, number], [smooth]);
+
     const timeLeftFormatted = React.useMemo(() => 
         moment.utc(Math.ceil(timeLeft) * 1000).format(
-          timeLeft < 60 ? 'ss' : timeLeft < 3600 ? 'mm:ss' : 'HH:mm:ss'
+            timeLeft <= 59 ? "s"
+            : timeLeft < 3600 ? 'mm:ss' 
+            : 'HH:mm:ss'
         ), 
         [timeLeft]
       );
@@ -80,61 +83,3 @@ export const PomodoroTimer = React.forwardRef<IPomodoroTimerRef, IPomodoroTimerP
         </section>
     );
 });
-    // export default function PomodoroTimer({ duration, start, pause, reload, onEnd, color }: IPomodoroTimerProps) {
-    // const { value: smooth, reset } = useCountUp({
-    //     isCounting: true,
-    //     duration,
-    //     start: duration,
-    //     easing: 'linear',
-    //     end: 0,
-    //     onComplete: onEnd,
-    //     formatter: (value) => [value as number, 100 - ((value as number * 100) / duration)],
-    // });
-
-    // const _reset = React.useCallback(() => {
-    //     reset();
-    //     start();
-    // }, [reset, start]);
-
-    // const [timeLeft, porcentage] = React.useMemo(() => smooth as unknown as [number, number], [smooth]);
-    // const timeLeftFormatted = React.useMemo(() => moment.utc(timeLeft * 1000).format(timeLeft < 60 ? 'ss' : timeLeft < 3600 ? 'mm:ss' : 'HH:mm:ss'), [timeLeft]);
-    // const endBlockTime = React.useMemo(() => {
-    //     const end = moment().add(timeLeft, 'seconds');
-    //     return end.format('HH:mm:ss');
-    // }, [timeLeft]);
-    // return (
-    //     <section className='flex flex-col items-center p-4 gap-4'>
-                      
-    //         <div className='w-full flex items-center justify-center'>
-    //             <svg width="100%" height="100%" viewBox="0 0 100 100">
-    //                 <circle
-    //                     cx="50%"
-    //                     cy="50%"
-    //                     r={radius}
-    //                     stroke="#ddd"
-    //                     strokeWidth={strokeWidth}
-    //                     fill="none"
-    //                 />
-    //                 <circle
-    //                     cx="50%"
-    //                     cy="50%"
-    //                     r={radius}
-    //                     stroke={color}
-    //                     strokeWidth={strokeWidth}
-    //                     fill="none"
-    //                     strokeDasharray={circumference}
-    //                     strokeDashoffset={circumference - (porcentage / 100) * circumference}
-    //                     strokeLinecap="round"
-    //                     transform="rotate(-90, 50, 50)"
-    //                 />
-    //                 <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="15" fill={'white'}>
-    //                     {timeLeftFormatted}
-    //                 </text>
-    //                 <text x="50%" y="90%" dominantBaseline="middle" textAnchor="middle" fontSize="5" fill={'white'}>
-    //                 End: {endBlockTime}
-    //                 </text>
-    //             </svg>
-    //         </div>
-    //     </section>
-    // );
-// }

@@ -14,7 +14,9 @@ export interface ITime {
 export interface IBlock {
   start?: string;
   name: string;
+  infinite?: boolean;
   blocks: {
+    autostart?: boolean;
     cycles: number;
     pomodoro: ITime;
     shortBreak: ITime;
@@ -25,103 +27,139 @@ export interface IBlock {
 
 
 
-function flow2Timers(flow: IBlock['blocks']) {
-  const blocks: ITime[] = [];
-  flow.forEach((block) => {
+function flow2Timers(flow: IBlock) {
+  const blocks: (ITime & { type: "cycle" | "shortBreak" | "longBreak" })[] = [];
+  flow.blocks.forEach((block) => {
     for (let i = 0; i < block.cycles; i++) {
-      blocks.push({ ...block.pomodoro, duration: block.pomodoro.duration * 60 });
+      blocks.push({ ...block.pomodoro, duration: block.pomodoro.duration * 60, type: 'cycle' });
       if (i < block.cycles - 1) {
-        blocks.push({ ...block.shortBreak, duration: block.shortBreak.duration * 60 });
+        blocks.push({ ...block.shortBreak, duration: block.shortBreak.duration * 60, type: 'shortBreak' });
       }
     }
-    blocks.push({ ...block.longBreak, duration: block.longBreak.duration * 60 });
+    blocks.push({ ...block.longBreak, duration: block.longBreak.duration * 60, type: 'longBreak' });
   });
-  //Elimina el ultimo break
-  blocks.pop();
+  if (flow.infinite !== true) {
+    if (blocks[blocks.length - 1].type !== 'cycle') {
+      blocks.pop();
+    }
+  }
   return blocks;
 }
-
+export function getFlowEndTime(startTime: string, flow: (ITime & { type: "cycle" | "shortBreak" | "longBreak" })[]) {
+  const _start = moment(startTime, 'HH:mm');
+  const _end = _start.clone();
+  flow.forEach((t) => _end.add(t.duration, 'seconds'));
+  return _end.format('HH:mm');
+}
 
 export default function Home() {
-  //Timer de 10 minutos
-  const [realStartTime, setRealStartTime] = React.useState<string | undefined>();
-  const [realStopTime, setRealStopTime] = React.useState<string | undefined>();
+  //Selected block
   const [block, setBlock] = React.useState<IBlock>(blocks[0]);
-  const [timers, setTimers] = React.useState<ITime[]>([]);
+  //Timers for the block
+  const [timers, setTimers] = React.useState<(ITime & { type: "cycle" | "shortBreak" | "longBreak" })[]>([]);
+  //Current timer
   const [currentTimer, setCurrentTimer] = React.useState<number>(0);
+  //Number of loops for infinite block
+  const [loops, setLoops] = React.useState<number>(0);
+  //Is paused or counting
   const [isCounting, setIsCounting] = React.useState(false);
+  //Real start and stop time for the block
+  const [realTime, setRealTime] = React.useState<[string,string] | undefined>();
+  //Timer and audio ref
   const timer = React.useRef<IPomodoroTimerRef | null>(null);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
 
-  React.useEffect(() => {
-    setTimers(flow2Timers(block.blocks));
+  const reset = React.useCallback(() => {
+    setTimers(flow2Timers(block));
     setCurrentTimer(0);
     setIsCounting(false);
     timer.current?.reset();
+  }, [block, timer])
+  //When change block, reset all
+  React.useEffect(() => {
+    reset();
   }, [block]);
-  const [startBlock, endBlock, stepsBlock] = React.useMemo(() => {
-    const timers = flow2Timers(block.blocks);
+
+  //Set theoretical data
+  const [theoricalStepsBlock] = React.useMemo(() => {
+    if(!timers || timers.length <= 0){
+      return [undefined,undefined,[]];
+    }
     const _start = moment(block.start, 'HH:mm');
-    const _end = _start.clone();
-    const steps: { start: string, end: string }[] = [];
+    const steps: { start: string, end: string, type: string }[] = [];
     timers.forEach((t) => {
       steps.push({
         start: _start.format('HH:mm'),
-        end: _start.add(t.duration, 'seconds').format('HH:mm')
+        end: _start.add(t.duration, 'seconds').format('HH:mm'),
+        type: t.type
       });
-      _end.add(t.duration, 'seconds');
     });
-    console.log(steps);
-    return [block.start && moment(block.start, 'HH:mm').format("HH:mm"), block.start &&  _end.format('HH:mm'), steps];
-  }, [block]);
-  const next = React.useCallback((sound: boolean = true) => {
+    // console.log(steps);
+    // console.log(moment(block.start, 'HH:mm').format("HH:mm"), block.start && (getFlowEndTime(block.start,timers)))
+    return [steps];
+  }, [timers]);
+
+  const next = React.useCallback((sound: boolean = true, manual: boolean = false) => {
+    if (timers.length <= 0) {
+      return
+    }
     //Sonar cancion
     if (sound && audioRef.current) {
       audioRef.current.play();
     }
-    timer.current?.reset();
-    if(currentTimer === timers.length - 1){
+    //Resetear si es infinito o si es manual y es el ultimo
+    if (currentTimer === timers.length - 1 && (block.infinite || manual)) {
       setCurrentTimer(0);
-    }else{
+      setLoops(loops + 1);
+    } else {
       setCurrentTimer(currentTimer + 1);
     }
-    setIsCounting(true)
-  }, [currentTimer, timer, audioRef]);
+    setIsCounting(manual? false: true);
+    timer.current?.reset();
+  }, [currentTimer, timer, audioRef, timers, loops]);
 
-  React.useEffect(()=>{
-    if(!isCounting){
-      setRealStartTime(undefined);
-      setRealStopTime(undefined);
-    } else{
-      if (!realStartTime) {
-        setRealStartTime(moment().format('HH:mm'));
+  React.useEffect(() => {
+    let auxTime:string;
+    if (!isCounting) {
+      setRealTime(undefined);
+    } else {
+      if (!realTime) {
+        auxTime = moment().format('HH:mm');
+        setRealTime([auxTime, getFlowEndTime(auxTime, timers)]);
       }
-      setRealStopTime(moment().add(timers.slice(currentTimer+1, timers.length).reduce((acc, t) => acc + t.duration, 0), 'seconds').format('HH:mm'));
     }
   }, [isCounting, block])
   return (
 
     <main className="flex flex-col items-center my-8 gap-4">
       <section className="flex flex-row items-center gap-2">
-        {blocks.map((b) => (
-          <button key={`block-${b.name}`} onClick={() => setBlock(b)} type="button" className={`text-white ${block.name === b.name ? 'bg-[#B91724] hover:bg-[#CA1724]' : 'bg-[#814652] hover:bg-[#B91724BB]'}  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2`}>{b.name}</button>
+        {blocks.map((b, i) => (
+          <button key={`block-${b.name}-${i}`}
+            onClick={() => setBlock(b)}
+            type="button"
+            className={`text-white flex flex-col items-center ${block.name === b.name ? 'bg-[#B91724] hover:bg-[#CA1724]' : 'bg-[#814652] hover:bg-[#B91724BB]'} font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2`}>
+            {b.name}
+            {block.blocks === b.blocks &&
+              block.start && timers.length >0 && (
+                <span>{block.start} ~ {getFlowEndTime(block.start, timers)}</span>
+              )}
+          </button>
         ))}
       </section>
       <audio ref={audioRef} src="/audio/sound_1.mp3" />
       <div className="flex flex-row items-center gap-2">
-        <span className='text-1xl font-bold'>{block.name}</span>
-        {startBlock && endBlock && (
-          <span>{startBlock} ~ {endBlock}</span>
+        {block.infinite && (
+          <span className='text-1xl font-bold'>Loops: {loops}</span>
         )}
-        {realStartTime && realStopTime && (
+
+        {realTime && (
           <>
-            <span>//</span>
-            <span>{realStartTime} ~ {realStopTime}</span>
+            <span>Block time {realTime[0]} ~ {realTime[1]}</span>
           </>
         )}
       </div>
-      <ProgressBalls currentIndex={currentTimer} balls={timers.map((t) => t.color)} />
+      <ProgressBalls startBlock={realTime?realTime[0]:block.start} currentIndex={currentTimer} balls={timers} />
       <PomodoroTimer
         ref={timer}
         timer={timers[currentTimer]}
@@ -142,7 +180,7 @@ export default function Home() {
           )
         }
         {/* <button onClick={() => {timer.current?.reset()}}>Reset</button> */}
-        <button onClick={() => { setRealStopTime(moment().add(timers.slice(currentTimer+1, timers.length).reduce((acc, t) => acc + t.duration, 0), 'seconds').format('HH:mm')); next(false) }}>Skip</button>
+        <button onClick={() => { next(false, true) }}>Skip</button>
       </div>
     </main>
 
