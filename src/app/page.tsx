@@ -80,9 +80,26 @@ export default function Home() {
     if (sound && audioRef.current) {
       audioRef.current.play();
     }
-    setCurrentTimer(currentTimer + 1);
-    timer.current?.reset(); setIsCounting(true)
+    timer.current?.reset();
+    if(currentTimer === timers.length - 1){
+      setCurrentTimer(0);
+    }else{
+      setCurrentTimer(currentTimer + 1);
+    }
+    setIsCounting(true)
   }, [currentTimer, timer, audioRef]);
+
+  React.useEffect(()=>{
+    if(!isCounting){
+      setRealStartTime(undefined);
+      setRealStopTime(undefined);
+    } else{
+      if (!realStartTime) {
+        setRealStartTime(moment().format('HH:mm'));
+      }
+      setRealStopTime(moment().add(timers.slice(currentTimer+1, timers.length).reduce((acc, t) => acc + t.duration, 0), 'seconds').format('HH:mm'));
+    }
+  }, [isCounting, block])
   return (
 
     <main className="flex flex-col items-center my-8 gap-4">
@@ -119,13 +136,7 @@ export default function Home() {
           (
             <button
               className="text-white bg-[#166534] hover:bg-[#166534]  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-              onClick={() => {
-                if (!realStartTime) {
-                  setRealStartTime(moment().format('HH:mm'));
-                }
-                setRealStopTime(moment().add(timers.slice(currentTimer+1, timers.length).reduce((acc, t) => acc + t.duration, 0), 'seconds').format('HH:mm'));
-                setIsCounting(true)
-              }}>
+              onClick={() => setIsCounting(true)}>
               Start
             </button>
           )
