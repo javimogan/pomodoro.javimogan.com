@@ -4,6 +4,7 @@ import { IPomodoroTimerRef, PomodoroTimer } from "./Component/PomodoroTimer";
 import ProgressBalls from "./Component/ProgressBall";
 import moment from "moment";
 import { blocks } from "@/BLOCKS";
+import { IoPauseOutline, IoPlayOutline } from "react-icons/io5";
 
 export interface ITime {
   color: string;
@@ -33,24 +34,24 @@ export interface IBlock {
 
 
 
-function flow2Timers(flow: IBlock, startBlock:string=moment().format('HH:mm')) {
+function flow2Timers(flow: IBlock, startBlock: string = moment().format('HH:mm')) {
   const blocks: IFlow[] = [];
-  
+
   // let _start = startBlock;
   // let _end = _start;
   flow.blocks.forEach((block) => {
     for (let i = 0; i < block.cycles; i++) {
       // _end = moment(_end, 'HH:mm').add(block.pomodoro.duration, 'minutes').format('HH:mm');
-      blocks.push({ ...block.pomodoro, duration: block.pomodoro.duration * 60, type: 'cycle'});
+      blocks.push({ ...block.pomodoro, duration: block.pomodoro.duration * 60, type: 'cycle' });
       // _start = _end;
       if (i < block.cycles - 1) {
         // _end = moment(_end, 'HH:mm').add(block.shortBreak.duration, 'minutes').format('HH:mm');
-        blocks.push({ ...block.shortBreak, duration: block.shortBreak.duration * 60, type: 'shortBreak'});
+        blocks.push({ ...block.shortBreak, duration: block.shortBreak.duration * 60, type: 'shortBreak' });
         // _start = _end;
       }
     }
     // _end = moment(_end, 'HH:mm').add(block.longBreak.duration, 'minutes').format('HH:mm');
-    blocks.push({ ...block.longBreak, duration: block.longBreak.duration * 60, type: 'longBreak'});
+    blocks.push({ ...block.longBreak, duration: block.longBreak.duration * 60, type: 'longBreak' });
     // _start = _end;
   });
   if (flow.infinite !== true) {
@@ -125,13 +126,13 @@ export default function Home() {
     let startTime: string;
     //Si está parado o es infinito o no tiene tiempo de inicio, poner con la hora actual
     if (!isCounting && currentTimer === 0) {
-      if(!block.start){
+      if (!block.start) {
         startTime = moment().format('HH:mm');
-      }else{
+      } else {
         startTime = block.start;
       }
       //Si esta contando, se calcula desde atrás
-    }else{
+    } else {
       startTime = moment().subtract(timers.slice(0, currentTimer).reduce((acc, t) => acc + t.duration, 0), 'seconds').format('HH:mm');
     }
     let _start = startTime;
@@ -142,7 +143,7 @@ export default function Home() {
       _timerTime.push({ start: _start, end: _end });
       _start = _end;
     });
-    if(_timerTime.length > 0){
+    if (_timerTime.length > 0) {
       setTimerTime(_timerTime);
     }
 
@@ -155,7 +156,7 @@ export default function Home() {
           <button key={`block-${b.name}-${i}`}
             onClick={() => setBlock(b)}
             type="button"
-            title={`Pomodoro time: ${blocks[i].blocks.reduce((acc, b) => acc + b.pomodoro.duration * b.cycles, 0)} minutes, Short break: ${blocks[i].blocks.reduce((acc, b) => acc + b.shortBreak.duration * b.cycles, 0) -  blocks[i].blocks[blocks[i].blocks.length -1].shortBreak.duration} minutes, Long break: ${blocks[i].blocks.reduce((acc, b) => acc + b.longBreak.duration, 0) - blocks[i].blocks[blocks[i].blocks.length -1].longBreak.duration} minutes`}
+            title={`Pomodoro time: ${blocks[i].blocks.reduce((acc, b) => acc + b.pomodoro.duration * b.cycles, 0)} minutes, Short break: ${blocks[i].blocks.reduce((acc, b) => acc + b.shortBreak.duration * b.cycles, 0) - blocks[i].blocks[blocks[i].blocks.length - 1].shortBreak.duration} minutes, Long break: ${blocks[i].blocks.reduce((acc, b) => acc + b.longBreak.duration, 0) - blocks[i].blocks[blocks[i].blocks.length - 1].longBreak.duration} minutes`}
             className={`text-white flex flex-col items-center ${block.name === b.name ? 'bg-[#B91724] hover:bg-[#CA1724]' : 'bg-[#814652] hover:bg-[#B91724BB]'} font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2`}>
             {b.name}
             {/* {block.blocks === b.blocks &&
@@ -173,11 +174,11 @@ export default function Home() {
 
         {timerTime && (
           <>
-            <span>{timerTime[0].start} ~ {timerTime[timerTime.length-1].end}</span>
+            <span>{timerTime[0].start} ~ {timerTime[timerTime.length - 1].end}</span>
           </>
         )}
       </div>
-      <ProgressBalls currentIndex={currentTimer} balls={timers} durationTime={timerTime}/>
+      <ProgressBalls currentIndex={currentTimer} balls={timers} durationTime={timerTime} />
       <PomodoroTimer
         ref={timer}
         timer={timers[currentTimer]}
@@ -186,15 +187,21 @@ export default function Home() {
       />
       <div className='flex gap-8'>
         {isCounting ? (
-          <button
-            className="text-white bg-[#B91724] hover:bg-[#CA1724]  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-            onClick={() => { setIsCounting(false) }}>Pause</button>) :
+           <button
+           className="text-[#B91724] p-1 border border-transparent hover:border-[#B91724] rounded-lg"
+           onClick={() => { setIsCounting(false) }}> <IoPauseOutline size={40} /></button>
+          // <button
+          //   className="text-white bg-[#B91724] hover:bg-[#CA1724]  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+          //   onClick={() => { setIsCounting(false) }}>Pause</button>
+          ) :
           (
+
             <button
-              className="text-white bg-[#166534] hover:bg-[#166534]  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+              className="text-[#166534] p-1 border border-transparent hover:border-[#166534] rounded-lg"
               onClick={() => setIsCounting(true)}>
-              Start
+              <IoPlayOutline size={40} />
             </button>
+
           )
         }
         {/* <button onClick={() => {timer.current?.reset()}}>Reset</button> */}
