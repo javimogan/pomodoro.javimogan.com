@@ -9,7 +9,30 @@ export const blocks: IBlock[] = [
         cycles: 3,
         pomodoro: { color: '#166534', text: 'Work time', duration: 45 },
         shortBreak: { color: '#614236', text: 'Short Break', duration: 8 },
-        longBreak: { color: '#B91724', text: 'Long Break', duration: 25 },
+        longBreak: { color: '#B91724', text: 'Short Break', duration: 25 },
+      },
+      {
+        cycles: 2,
+        pomodoro: { color: '#166534', text: 'Work time', duration: 45 },
+        shortBreak: { color: '#614236', text: 'Short Break', duration: 8 },
+        longBreak: { color: '#B91724', text: 'Long Break', duration: 15 },
+      }],
+  },
+  {
+    start: '07:30',
+    name: 'Morning TEST',
+    blocks: [
+      {
+        cycles: 2,
+        pomodoro: { color: '#166534', text: 'Work time', duration: 50 },
+        shortBreak: { color: '#614236', text: 'Short Break', duration: 10 },
+        longBreak: { color: '#CFA940', text: 'Short Break', duration: 10 },
+      },
+      {
+        cycles: 1,
+        pomodoro: { color: '#166534', text: 'Work time', duration: 45 },
+        shortBreak: { color: '#614236', text: 'Short Break', duration: 1 },
+        longBreak: { color: '#B91724', text: 'Long Break', duration: 30 },
       },
       {
         cycles: 2,
