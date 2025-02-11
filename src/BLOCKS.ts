@@ -70,7 +70,7 @@ export const blocks: IBlock[] = [
 //If dev wants to add more blocks, they can add them here
 if (process.env.NODE_ENV === 'development') {
   blocks.push({
-    name: 'Test 1',
+    name: 'Test',
     start: '09:00',
     blocks: [
       {
@@ -88,12 +88,12 @@ if (process.env.NODE_ENV === 'development') {
     ],
   });
   blocks.push({
-    name: 'Test',
+    name: 'Test 1',
     infinite: true,
     blocks: [
       {
         cycles: 2,
-        pomodoro: { color: '#166534', text: 'Work time', duration: 1/60 },
+        pomodoro: { color: '#166534', text: 'Work time', duration: 60.04 },
         shortBreak: { color: '#614236', text: 'Short Break', duration: 1/60 },
         longBreak: { color: '#B91724', text: 'Long Break', duration: 1/60 },
       }

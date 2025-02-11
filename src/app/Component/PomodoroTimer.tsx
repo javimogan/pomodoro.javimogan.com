@@ -36,14 +36,13 @@ export const PomodoroTimer = React.forwardRef<IPomodoroTimerRef, IPomodoroTimerP
 
     const [timeLeft, porcentage] = React.useMemo(() => smooth as unknown as [number, number], [smooth]);
 
-    const timeLeftFormatted = React.useMemo(() =>
-        moment.utc(Math.ceil(timeLeft) * 1000).format(
-            timeLeft <= 59 ? "s"
-                : timeLeft < 3600 ? 'mm:ss'
-                    : 'HH:mm:ss'
-        ),
-        [timeLeft]
-    );
+    console.log(timer?.duration)
+    const timeLeftFormatted = React.useMemo(() => {
+        if (timeLeft >= 3600) return moment.utc(timeLeft * 1000).format("HH:mm:ss");
+        if (timeLeft >= 60) return moment.utc(timeLeft * 1000).format("mm:ss");
+        return moment.utc(timeLeft * 1000).format("ss");
+
+    }, [timeLeft]);
     const endBlockTime = React.useMemo(() => {
         const end = moment().add(timeLeft, 'seconds');
         return end.format('HH:mm');
