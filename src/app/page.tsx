@@ -4,7 +4,7 @@ import { IPomodoroTimerRef, PomodoroTimer } from "./Component/PomodoroTimer";
 import ProgressBalls from "./Component/ProgressBall";
 import moment from "moment";
 import { blocks } from "@/BLOCKS";
-import { IoPauseOutline, IoPlayOutline } from "react-icons/io5";
+import { IoPause, IoPauseOutline, IoPlay, IoPlayOutline, IoPlaySkipBack, IoPlaySkipForward, IoReload } from "react-icons/io5";
 
 export interface ITime {
   color: string;
@@ -186,26 +186,36 @@ export default function Home() {
         isCounting={isCounting}
       />
       <div className='flex gap-8'>
+        <button
+          className="text-[#614236] p-1 rounded-lg"
+          onClick={reset}>
+          <IoReload size={25} />
+        </button>
         {isCounting ? (
-           <button
-           className="text-[#B91724] p-1 border border-transparent hover:border-[#B91724] rounded-lg"
-           onClick={() => { setIsCounting(false) }}> <IoPauseOutline size={40} /></button>
+          <button
+            className="text-[#614236] p-1 rounded-lg"
+            onClick={() => { setIsCounting(false) }}> <IoPause size={40} /></button>
           // <button
           //   className="text-white bg-[#B91724] hover:bg-[#CA1724]  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
           //   onClick={() => { setIsCounting(false) }}>Pause</button>
-          ) :
+        ) :
           (
 
             <button
-              className="text-[#166534] p-1 border border-transparent hover:border-[#166534] rounded-lg"
+              className="text-[#166534] p-1 rounded-lg"
               onClick={() => setIsCounting(true)}>
-              <IoPlayOutline size={40} />
+              <IoPlay size={40} />
             </button>
 
           )
         }
         {/* <button onClick={() => {timer.current?.reset()}}>Reset</button> */}
-        <button onClick={() => { next(false, true) }}>Skip</button>
+        {/* <button onClick={() => { next(false, true) }}>Skip</button> */}
+        <button
+          className="text-[#614236] p-1 rounded-lg"
+          onClick={() => next(false, true)}>
+          <IoPlaySkipForward size={25} />
+        </button>
       </div>
     </main>
 
