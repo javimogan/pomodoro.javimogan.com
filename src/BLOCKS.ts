@@ -30,7 +30,8 @@ export const blocks: IBlock[] = [
       },
       {
         cycles: 1,
-        pomodoro: { color: '#CFA940', text: 'Work time', duration: 45 },
+        //#CFA940
+        pomodoro: { color: '#166534', text: 'Work time', duration: 45 },
         shortBreak: { color: '#614236', text: 'Short Break', duration: 10 },
         longBreak: { color: '#B91724', text: 'Long Break', duration: 30 },
       }
