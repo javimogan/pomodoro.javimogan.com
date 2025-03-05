@@ -38,6 +38,24 @@ export const blocks: IBlock[] = [
     ],
   },
   {
+    start: '07:00',
+    name: 'KS',
+    blocks: [
+      {
+        cycles: 2,
+        pomodoro: { color: '#166534', text: 'Work time', duration: 90 },
+        shortBreak: { color: '#614236', text: 'Short Break', duration: 15 },
+        longBreak: { color: '#B91724', text: 'Short Break', duration: 30 },
+      },
+      {
+        cycles: 1,
+        pomodoro: { color: '#166534', text: 'Work time', duration: 90 },
+        shortBreak: { color: '#614236', text: 'Short Break', duration: 15 },
+        longBreak: { color: '#B91724', text: 'Short Break', duration: 30 },
+      }
+    ],
+  },
+  {
     start: '15:00',
     name: 'Afternoon',
     blocks: [

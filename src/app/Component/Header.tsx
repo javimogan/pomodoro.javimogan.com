@@ -4,9 +4,16 @@ import moment from 'moment';
 export default function Header() {
     const [time, setTime] = React.useState(moment().format("HH:mm")); // Estado para forzar el re-render
 
-    setInterval(() => {
-        setTime(moment().format("HH:mm"));
-    }, 1000);
+    React.useEffect(() => {
+        // Efecto para actualizar la hora cada segundo
+        const int = setInterval(() => {
+            setTime(moment().format("HH:mm"));
+        }, 1000);
+        return () => {
+            clearInterval(int);
+        }
+
+    }, []);
     return (
         <header className='flex flex-col text-center p-4'
         >
