@@ -6,7 +6,7 @@
 <p align="center">
 <img src="https://github.com/javimogan/pomodoro.javimogan.com/blob/main/public/images/banner.svg"
 	alt="Thumbnail"
-	width=250
+	width=255
 	style="float: left; margin-right: 10px;" />
 </p>
 
