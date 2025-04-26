@@ -5,7 +5,7 @@ import ProgressBalls from "./Component/ProgressBall";
 import moment from "moment";
 import { blocks } from "@/BLOCKS";
 import { IoPause, IoPauseOutline, IoPlay, IoPlayOutline, IoPlaySkipBack, IoPlaySkipForward, IoReload } from "react-icons/io5";
-
+import { TEMAS_INFORMATICA } from "@/TEMARIO";
 export interface ITime {
   color: string;
   text: string;
@@ -68,7 +68,17 @@ function getFlowEndTime(startTime: string, flow: IFlow[]) {
   return _end.format('HH:mm');
 }
 
+function getRandomTemas(n: number) {
+  const shuffled = [...TEMAS_INFORMATICA].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, n);
+}
+
 export default function Home() {
+  // 4 temas de informatica aleatorios
+  const [randomTemas, setRandomTemas] = React.useState<string[]>(getRandomTemas(4));
+  const resetRandomTemas = React.useCallback(() => {
+    setRandomTemas(getRandomTemas(4));
+  }, [randomTemas]);
   //Selected block
   const [block, setBlock] = React.useState<IBlock>(blocks[0]);
   //Start and Stop time for each timer
@@ -216,6 +226,19 @@ export default function Home() {
           onClick={() => next(false, true)}>
           <IoPlaySkipForward size={25} />
         </button>
+      </div>
+      <div className='flex flex-col p-8 gap-4 w-full'>
+        <div className='flex flex-row items-center gap-2'>
+          <button
+            className="text-[#614236] p-1 rounded-lg"
+            onClick={resetRandomTemas}>
+            <IoReload size={25} />
+          </button>
+          <h2 className="text-2xl font-bold">Temas aleatorios</h2>
+        </div>
+        {randomTemas.map((tema, i) => (
+          <p key={`tema-${i}`}>{tema}</p>
+        ))}
       </div>
     </main>
 
