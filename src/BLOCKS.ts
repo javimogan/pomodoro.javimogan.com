@@ -18,60 +18,60 @@ export const blocks: IBlock[] = [
   //       longBreak: { color: '#B91724', text: 'Long Break', duration: 15 },
   //     }],
   // },
-  {
-    start: '07:30',
-    name: 'Morning',
-    blocks: [
-      {
-        cycles: 3,
-        pomodoro: { color: '#166534', text: 'Work time', duration: 60 },
-        shortBreak: { color: '#614236', text: 'Short Break', duration: 10 },
-        longBreak: { color: '#B91724', text: 'Short Break', duration: 30 },
-      },
-      {
-        cycles: 1,
-        //#CFA940
-        pomodoro: { color: '#166534', text: 'Work time', duration: 45 },
-        shortBreak: { color: '#614236', text: 'Short Break', duration: 10 },
-        longBreak: { color: '#B91724', text: 'Long Break', duration: 30 },
-      }
-    ],
-  },
-  {
-    start: '07:00',
-    name: 'KS',
-    blocks: [
-      {
-        cycles: 2,
-        pomodoro: { color: '#166534', text: 'Work time', duration: 90 },
-        shortBreak: { color: '#614236', text: 'Short Break', duration: 15 },
-        longBreak: { color: '#B91724', text: 'Short Break', duration: 30 },
-      },
-      {
-        cycles: 1,
-        pomodoro: { color: '#166534', text: 'Work time', duration: 90 },
-        shortBreak: { color: '#614236', text: 'Short Break', duration: 15 },
-        longBreak: { color: '#B91724', text: 'Short Break', duration: 30 },
-      }
-    ],
-  },
-  {
-    start: '15:00',
-    name: 'Afternoon',
-    blocks: [
-      {
-        cycles: 4,
-        pomodoro: { color: '#166534', text: 'Work time', duration: 25 },
-        shortBreak: { color: '#614236', text: 'Short Break', duration: 5 },
-        longBreak: { color: '#B91724', text: 'Long Break', duration: 15 },
-      },
-      {
-        cycles: 2,
-        pomodoro: { color: '#166534', text: 'Work time', duration: 25 },
-        shortBreak: { color: '#614236', text: 'Short Break', duration: 5 },
-        longBreak: { color: '#B91724', text: 'Long Break', duration: 15 },
-      }],
-  },
+  // {
+  //   start: '07:30',
+  //   name: 'Morning',
+  //   blocks: [
+  //     {
+  //       cycles: 3,
+  //       pomodoro: { color: '#166534', text: 'Work time', duration: 60 },
+  //       shortBreak: { color: '#614236', text: 'Short Break', duration: 10 },
+  //       longBreak: { color: '#B91724', text: 'Short Break', duration: 30 },
+  //     },
+  //     {
+  //       cycles: 1,
+  //       //#CFA940
+  //       pomodoro: { color: '#166534', text: 'Work time', duration: 45 },
+  //       shortBreak: { color: '#614236', text: 'Short Break', duration: 10 },
+  //       longBreak: { color: '#B91724', text: 'Long Break', duration: 30 },
+  //     }
+  //   ],
+  // },
+  // {
+  //   start: '07:00',
+  //   name: 'KS',
+  //   blocks: [
+  //     {
+  //       cycles: 2,
+  //       pomodoro: { color: '#166534', text: 'Work time', duration: 90 },
+  //       shortBreak: { color: '#614236', text: 'Short Break', duration: 15 },
+  //       longBreak: { color: '#B91724', text: 'Short Break', duration: 30 },
+  //     },
+  //     {
+  //       cycles: 1,
+  //       pomodoro: { color: '#166534', text: 'Work time', duration: 90 },
+  //       shortBreak: { color: '#614236', text: 'Short Break', duration: 15 },
+  //       longBreak: { color: '#B91724', text: 'Short Break', duration: 30 },
+  //     }
+  //   ],
+  // },
+  // {
+  //   start: '15:00',
+  //   name: 'Afternoon',
+  //   blocks: [
+  //     {
+  //       cycles: 4,
+  //       pomodoro: { color: '#166534', text: 'Work time', duration: 25 },
+  //       shortBreak: { color: '#614236', text: 'Short Break', duration: 5 },
+  //       longBreak: { color: '#B91724', text: 'Long Break', duration: 15 },
+  //     },
+  //     {
+  //       cycles: 2,
+  //       pomodoro: { color: '#166534', text: 'Work time', duration: 25 },
+  //       shortBreak: { color: '#614236', text: 'Short Break', duration: 5 },
+  //       longBreak: { color: '#B91724', text: 'Long Break', duration: 15 },
+  //     }],
+  // },
   {
     name: 'Pomodoro',
     infinite: true,
